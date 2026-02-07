@@ -46,3 +46,34 @@ class RideViewSet(ModelViewSet):
         ride.status = "CANCELED"
         ride.save()
         return Response({"message": "RIde canceled"}, status=200)
+
+    @action(detail=True, methods=["post"])
+    def update_location(self, request, pk=None):
+        ride = self.get_object()
+        latitude = request.data.get("latitude")
+        longitude = request.data.get("longitude")
+
+        if latitude is None or longitude is None:
+            return Response(
+                {"error": "latitude and longitude are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        ride.latitude = latitude
+        ride.longitude = longitude
+        ride.current_location = f"{latitude}, {longitude}"
+        ride.save()
+        return Response(
+            {
+                "message": "Location Updated",
+                "latitude": ride.latitude,
+                "longitude": ride.longitude,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=True, methods=["post"])  
+    def location(self, request, pk=None):
+        ride = self.get_object()
+        return Response(
+            {"current location": ride.current_location}, status=status.HTTP_200_OK
+        )

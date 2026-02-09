@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    
     "channels",
     "users",
     "rides",
@@ -48,13 +47,15 @@ INSTALLED_APPS = [
 
 
 
-ASGI_APPLICATION = "ride_sharing_api.asgi.application"
+ASGI_APPLICATION = 'ride_sharing_api.asgi.application'
+
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
-    }
+    },
 }
+
 
 
 
@@ -85,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "ride_sharing_api.wsgi.application"
+# WSGI_APPLICATION = "ride_sharing_api.wsgi.application"
 
 
 # Database

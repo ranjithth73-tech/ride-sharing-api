@@ -10,6 +10,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.db.models import Q
+
 
 
 # Create your views here.
@@ -22,20 +24,13 @@ class RideViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-
-        if getattr(self, 'swagger_fake_view', False):
-            return Ride.objects.none()
-        
-
         user = self.request.user
 
-        if not user.is_authenticated:
-            return Ride.objects.none()
-        
         if user.is_driver:
-            return Ride.objects.filter(driver=user)
+            return Ride.objects.filter(Q(driver=user) | Q(status="REQUESTED"))
 
         return Ride.objects.filter(rider=user)
+
 
 
 
@@ -49,21 +44,22 @@ class RideViewSet(ModelViewSet):
     @action(detail=True, methods=["post"])
     def accept(self, request, pk=None):
         ride = self.get_object()
+
         if not request.user.is_driver:
-            return Response(
-                {"error": "Only drivers can accept the rides"},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        
+            return Response({"error": "Only drivers can accept the rides"}, status=403)
+
         if ride.driver is not None:
             return Response({"error": "Ride already taken"}, status=400)
 
         if ride.status != "REQUESTED":
             return Response({"error": "Ride not available"}, status=400)
+
         ride.driver = request.user
         ride.status = "ACCEPTED"
         ride.save()
+
         return Response({"message": "Ride accepted"}, status=200)
+
 
     # Start the ride
     @action(detail=True, methods=["post"])

@@ -8,19 +8,22 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 """
 
 import os
-
+import django
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import rides.routing
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ride_sharing_api.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ride_sharing_api.settings')
+django.setup()
 
-application = ProtocolTypeRouter(
-    {
-        "http": get_asgi_application(),
-        "websocket": AuthMiddlewareStack(
-            URLRouter(rides.routing.websocket_urlpatterns)
-        ),
-    }
-)
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            rides.routing.websocket_urlpatterns
+        )
+    ),
+})
+
+

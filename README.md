@@ -1,223 +1,137 @@
-# 🚕 Ride Sharing API (Django + DRF)
+# Ride Sharing API
 
-This project is a **Ride Sharing Backend API** built using **Django Rest Framework (DRF)**. It supports **user and driver roles**, **JWT authentication**, **ride lifecycle management**, **driver matching**, and **simulated real-time tracking**.
-
-This repository is suitable for **machine tasks**, **portfolio projects**, and **backend interviews**.
-
----
-
-## 📌 Features
-
-* User & Driver registration
-* JWT-based authentication
-* Role-based permissions (Rider vs Driver)
-* Ride creation & lifecycle
-* Driver matching using distance
-* Simulated real-time ride tracking
-* Clean REST APIs
+A backend API for a ride-sharing system built using **Django**, **Django REST Framework**, and **Django Channels**.  
+Supports **Rider and Driver roles**, **JWT authentication**, **ride lifecycle management**, **driver matching**, and **real-time location tracking via WebSockets**.
 
 ---
 
-## 🧱 Tech Stack
-
-* Python 3.12
-* Django 6.x
-* Django REST Framework
-* Simple JWT
-* SQLite (development)
-
----
-
-## 📂 Project Structure
-
-```
-ride_sharing_api/
-├── users/        # Custom user model & auth
-├── rides/        # Ride logic & APIs
-├── utils.py      # Distance calculation
-├── settings.py
-├── urls.py
-└── manage.py
-```
+## Tech Stack
+- Python 3.12
+- Django 6.x
+- Django REST Framework
+- Django Channels (WebSockets)
+- Simple JWT
+- drf-yasg (Swagger)
+- SQLite (Development)
 
 ---
 
-## 🔐 Authentication Flow
+## Features
+- Custom User model (Rider / Driver)
+- JWT Authentication
+- Role-based access control
+- Ride lifecycle:
 
-* All users register & login using the same system
-* JWT tokens are issued on login
-* Role (`is_driver`) controls access to APIs
+
+REQUESTED → ACCEPTED → STARTED → COMPLETED
+↘ CANCELED
+
+
+
+- Driver matching using Haversine distance
+- Real-time driver location updates
+- Swagger API documentation
+- Django Admin panel
 
 ---
 
-## 🚀 Setup Instructions
-
-### 1️⃣ Clone the repository
+## Setup
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/ranjithth73-tech/ride-sharing-api.git
 cd ride_sharing_api
-```
 
-### 2️⃣ Create virtual environment
-
-```bash
 python -m venv venv
 source venv/bin/activate
-```
 
-### 3️⃣ Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 4️⃣ Run migrations
-
-```bash
-python manage.py makemigrations
 python manage.py migrate
-```
-
-### 5️⃣ Start server
-
-```bash
 python manage.py runserver
-```
 
-Server runs at:
+Server: http://127.0.0.1:8000
 
-```
-http://127.0.0.1:8000
-```
+Swagger: http://127.0.0.1:8000/swagger/
 
----
+Admin: http://127.0.0.1:8000/admin/
 
-## 🧪 API Usage (Step-by-Step)
 
-### 1️⃣ Register User
 
-```
-POST /api/auth/register
-```
+Authentication
 
-```json
-{
-  "username": "rider1",
-  "password": "test1234",
-  "is_driver": false
-}
-```
+Register
 
----
+POST /api/auth/register/
 
-### 2️⃣ Login User
 
-```
-POST /api/auth/login
-```
+Login
 
-```json
-{
-  "username": "rider1",
-  "password": "test1234"
-}
-```
+POST /api/auth/login/
 
-Copy the **access token** and use it as **Bearer Token**.
 
----
+Use the access token:
 
-### 3️⃣ Create Ride (Rider)
+Authorization: Bearer <access_token>
 
-```
+Main APIs
+
+Create Ride (Rider)
+
 POST /api/rides/
-```
 
-```json
-{
-  "pickup_location": "MG Road",
-  "dropoff_location": "Airport",
-  "pickup_latitude": 12.9716,
-  "pickup_longitude": 77.5946
-}
-```
 
----
+Accept Ride (Driver)
 
-### 4️⃣ Accept Ride (Driver)
-
-```
 POST /api/rides/{id}/accept/
-```
 
----
 
-### 5️⃣ Start Ride
+Start Ride
 
-```
 POST /api/rides/{id}/start/
-```
 
----
 
-### 6️⃣ Update Location
+Update Driver Location
 
-```
 POST /api/rides/{id}/update_location/
-```
 
-```json
-{
-  "latitude": 12.975,
-  "longitude": 77.599
-}
-```
 
----
+Complete Ride
 
-### 7️⃣ Complete Ride
-
-```
 POST /api/rides/{id}/completed/
-```
 
----
 
-## 🎯 Driver Matching (Bonus)
+Cancel Ride
 
-```
+POST /api/rides/{id}/canceled/
+
+
+Match Nearest Driver
+
 POST /api/rides/{id}/match_driver/
-```
 
-* Matches nearest available driver
-* Uses Haversine distance formula
+Real-Time Tracking
 
----
+WebSocket endpoint:
 
-## ✅ Status Flow
+ws://127.0.0.1:8000/ws/rides/<ride_id>/
 
-```
-REQUESTED → ACCEPTED → STARTED → COMPLETED
-       ↘ CANCELED
-```
 
----
+Driver location updates are broadcast to connected clients in real time.
 
-## 🧠 Notes
-
-* Real-time tracking is simulated using polling
-* Architecture is WebSocket-ready
-* Clean separation of concerns
-
----
-
-## 📌 Author
+Author
 
 Ranjith
 
+Highlights
+
+Clean REST architecture
+
+Role-based permissions
+
+Real-time tracking using Django Channels
+
+Swagger documentation
+
+
+
+
 ---
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub

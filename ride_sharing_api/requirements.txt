@@ -1,0 +1,8 @@
+Django==6.0.2
+djangorestframework==3.x.x
+djangorestframework-simplejwt==5.x.x
+channels==4.x.x
+drf-yasg==1.x.x
+PyJWT==2.x.x
+asgiref==3.x.x
+sqlparse==0.x.x

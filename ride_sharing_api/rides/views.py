@@ -8,6 +8,8 @@ from rest_framework.decorators import action
 from .utils import calculate_distance
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 # Create your views here.
@@ -16,9 +18,26 @@ User = get_user_model()
 
 
 class RideViewSet(ModelViewSet):
-    queryset = Ride.objects.all()
     serializer_class = RideSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        if getattr(self, 'swagger_fake_view', False):
+            return Ride.objects.none()
+        
+
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return Ride.objects.none()
+        
+        if user.is_driver:
+            return Ride.objects.filter(driver=user)
+
+        return Ride.objects.filter(rider=user)
+
+
 
     def perform_create(self, serializer):
         if self.request.user.is_driver:
@@ -35,6 +54,10 @@ class RideViewSet(ModelViewSet):
                 {"error": "Only drivers can accept the rides"},
                 status=status.HTTP_403_FORBIDDEN,
             )
+        
+        if ride.driver is not None:
+            return Response({"error": "Ride already taken"}, status=400)
+
         if ride.status != "REQUESTED":
             return Response({"error": "Ride not available"}, status=400)
         ride.driver = request.user
@@ -97,6 +120,12 @@ class RideViewSet(ModelViewSet):
     def update_location(self, request, pk=None):
         ride = self.get_object()
 
+        if ride.driver != request.user:
+            return Response(
+                {"error": "Only driver can update location"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         latitude = request.data.get("latitude")
         longitude = request.data.get("longitude")
 
@@ -105,12 +134,25 @@ class RideViewSet(ModelViewSet):
                 {"error": "latitude and longitude are required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
         ride.current_latitude = latitude
         ride.current_longitude = longitude
         ride.save()
+        
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"ride_{ride.id}",
+            {
+                "type": "send_location",
+                "latitude": ride.current_latitude,
+                "longitude": ride.current_longitude,
+            },
+        )
+
         return Response(
             {
-                "message": "Location Updated",
+                "messages": "location_updated",
                 "latitude": ride.current_latitude,
                 "longitude": ride.current_longitude,
             },
@@ -126,6 +168,7 @@ class RideViewSet(ModelViewSet):
         )
 
         # Driver Matching
+
     @action(detail=True, methods=["post"])
     def match_driver(self, request, pk=None):
         ride = self.get_object()

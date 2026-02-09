@@ -22,9 +22,9 @@ class RideSerializer(serializers.ModelSerializer):
         )
 
 
-def validate(self, data):
-    if not data.get("pickup_location"):
-        raise serializers.ValidationError("Pickup location is required")
-    if not data.get("dropoff_location"):
-        raise serializers.ValidationError("Dropoff location is required")
-    return data
+    def validate(self, data):
+        if not data.get("pickup_location"):
+            raise serializers.ValidationError("Pickup location is required")
+        if not data.get("dropoff_location"):
+            raise serializers.ValidationError("Dropoff location is required")
+        return data

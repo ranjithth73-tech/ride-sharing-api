@@ -3,4 +3,7 @@ from .models import Ride
 
 # Register your models here.
 
-admin.site.register(Ride)
+@admin.register(Ride)
+class RideAdmin(admin.ModelAdmin):
+    list_display = ("id", "rider", "driver", "status", "created_at")
+    list_filter = ("status",)

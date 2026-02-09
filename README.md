@@ -1,12 +1,12 @@
-# 🚕 Ride Sharing API (Django + DRF)
+#  Ride Sharing API (Django + DRF)
 
 This project is a **Ride Sharing Backend API** built using **Django Rest Framework (DRF)**. It supports **user and driver roles**, **JWT authentication**, **ride lifecycle management**, **driver matching**, and **simulated real-time tracking**.
 
-This repository is suitable for **machine tasks**, **portfolio projects**, and **backend interviews**.
+This repository is suitable for **machine tasks**
 
 ---
 
-## 📌 Features
+##  Features
 
 * User & Driver registration
 * JWT-based authentication
@@ -18,7 +18,7 @@ This repository is suitable for **machine tasks**, **portfolio projects**, and *
 
 ---
 
-## 🧱 Tech Stack
+##  Tech Stack
 
 * Python 3.12
 * Django 6.x
@@ -28,7 +28,7 @@ This repository is suitable for **machine tasks**, **portfolio projects**, and *
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 ride_sharing_api/
@@ -42,7 +42,7 @@ ride_sharing_api/
 
 ---
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 * All users register & login using the same system
 * JWT tokens are issued on login
@@ -50,36 +50,36 @@ ride_sharing_api/
 
 ---
 
-## 🚀 Setup Instructions
+##  Setup Instructions
 
-### 1️⃣ Clone the repository
+### 1️ Clone the repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/ranjithth73-tech/ride-sharing-api
 cd ride_sharing_api
 ```
 
-### 2️⃣ Create virtual environment
+### 2️ Create virtual environment
 
 ```bash
 python -m venv venv
 source venv/bin/activate
 ```
 
-### 3️⃣ Install dependencies
+### 3️ Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Run migrations
+### 4️ Run migrations
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 5️⃣ Start server
+### 5️ Start server
 
 ```bash
 python manage.py runserver
@@ -93,9 +93,9 @@ http://127.0.0.1:8000
 
 ---
 
-## 🧪 API Usage (Step-by-Step)
+##  API Usage (Step-by-Step)
 
-### 1️⃣ Register User
+### 1️ Register User
 
 ```
 POST /api/auth/register
@@ -111,7 +111,7 @@ POST /api/auth/register
 
 ---
 
-### 2️⃣ Login User
+### 2️ Login User
 
 ```
 POST /api/auth/login
@@ -128,7 +128,7 @@ Copy the **access token** and use it as **Bearer Token**.
 
 ---
 
-### 3️⃣ Create Ride (Rider)
+### 3️ Create Ride (Rider)
 
 ```
 POST /api/rides/
@@ -145,7 +145,7 @@ POST /api/rides/
 
 ---
 
-### 4️⃣ Accept Ride (Driver)
+### 4️ Accept Ride (Driver)
 
 ```
 POST /api/rides/{id}/accept/
@@ -153,7 +153,7 @@ POST /api/rides/{id}/accept/
 
 ---
 
-### 5️⃣ Start Ride
+### 5️ Start Ride
 
 ```
 POST /api/rides/{id}/start/
@@ -161,7 +161,7 @@ POST /api/rides/{id}/start/
 
 ---
 
-### 6️⃣ Update Location
+### 6️ Update Location
 
 ```
 POST /api/rides/{id}/update_location/
@@ -176,7 +176,7 @@ POST /api/rides/{id}/update_location/
 
 ---
 
-### 7️⃣ Complete Ride
+### 7️ Complete Ride
 
 ```
 POST /api/rides/{id}/completed/
@@ -184,7 +184,7 @@ POST /api/rides/{id}/completed/
 
 ---
 
-## 🎯 Driver Matching (Bonus)
+##  Driver Matching (Bonus)
 
 ```
 POST /api/rides/{id}/match_driver/
@@ -195,7 +195,7 @@ POST /api/rides/{id}/match_driver/
 
 ---
 
-## ✅ Status Flow
+##  Status Flow
 
 ```
 REQUESTED → ACCEPTED → STARTED → COMPLETED
@@ -204,7 +204,7 @@ REQUESTED → ACCEPTED → STARTED → COMPLETED
 
 ---
 
-## 🧠 Notes
+##  Notes
 
 * Real-time tracking is simulated using polling
 * Architecture is WebSocket-ready
@@ -212,12 +212,12 @@ REQUESTED → ACCEPTED → STARTED → COMPLETED
 
 ---
 
-## 📌 Author
+##  Author
 
 Ranjith
 
 ---
 
-## ⭐ If you like this project
+##  If you like this project
 
 Give it a ⭐ on GitHub
